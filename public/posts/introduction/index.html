@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Golang</title>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/css/layouts/main.css"/>
+<link rel="stylesheet" href="/css/navigators/navbar.css"/>
+<link rel="stylesheet" href="/css/plyr.css"/>
+<link rel="stylesheet" href="/css/flag-icon.min.css"/>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Muli:wght@300;400;500;600" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" />
+
+
+
+
+<meta property="og:title" content="Golang" />
+<meta property="og:description" content="Introduction to Sample Post" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hugo-toha.github.io/posts/introduction/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-06-08T08:06:25+06:00" />
+<meta property="article:modified_time" content="2020-06-08T08:06:25+06:00" />
+
+
+
+    
+    
+<meta name="description" content="Introduction to Sample Post" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css"
+/>
+<link rel="stylesheet" href="/css/layouts/single.css"/>
+<link rel="stylesheet" href="/css/navigators/sidebar.css">
+
+<link rel="stylesheet" href="/css/style.css"/>
+
+
+
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target="#TableOfContents" data-offset="80">
+    <div class="container-fluid bg-dimmed wrapper">
+      
+      
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-xl top-navbar final-navbar shadow">
+  <div class="container">
+      <button class="navbar-toggler navbar-light" id="sidebar-toggler" type="button" onclick="toggleSidebar()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">
+      John&#39;s Blog</a>
+    <button class="navbar-toggler navbar-light" id="toc-toggler" type="button" onclick="toggleTOC()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse lang-selector" id="top-nav-items">
+      <ul class="navbar-nav ml-auto">
+      
+      </ul>
+    </div>
+  </div>
+  
+  
+  
+</nav>
+
+
+
+      
+      
+  <section class="sidebar-section" id="sidebar-section">
+    <div class="sidebar-holder">
+      <div class="sidebar" id="sidebar">
+        <form class="mx-auto" method="get" action="/search">
+          <input type="text" name="keyword" value="" placeholder="Search" data-search="" id="search-box" />
+        </form>
+        <div class="sidebar-tree">
+          <ul class="tree" id="tree">
+            <li id="list-heading"><a href="/posts" data-filter="all">Posts</a></li>
+            <div class="subtree">
+                
+  
+  
+  
+  
+    
+    
+  
+  
+    
+    <li><a class="active" href="/posts/introduction/" title="Golang 底层实现原理分析">Golang 底层实现原理分析</a></li>
+  
+
+
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+      
+      
+<section class="content-section" id="content-section">
+  <div class="content">
+    <div class="container p-0 read-area">
+      
+      <div class="hero-area col-sm-12" id="hero-area" style='background-image: url(https://hugo-toha.github.io/posts/introduction/hero.svg);'>
+      </div>
+
+      
+      <div class="page-content">
+        <div class="author-profile ml-auto align-self-lg-center">
+          <img class="rounded-circle" src='/images/author/john_hu7f9991f5b5d471ecdfc6cff3db1a9fe6_6397_120x120_fit_box_3.png' alt="Author Image">
+          <h5 class="author-name">席乐朋</h5>
+          <p>June 8, 2020</p>
+        </div>
+
+        <div class="title">
+          <h1>Golang</h1>
+        </div>
+        
+        <div class="post-content" id="post-content">
+          <ol>
+<li><a href="#map-%E7%9A%84%E5%BA%95%E5%B1%82%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0">map 的底层如何实现</a></li>
+</ol>
+<p><strong>map 的底层实现原理是什么</strong></p>
+<p>map 是由 key-value 对组成的；key 只会出现一次。</p>
+<p>map 的设计也被称为 “The dictionary problem”，它的任务是设计一种数据结构用来维护一个集合的数据，并且可以同时对集合进行增删查改的操作。
+最主要的数据结构有两种：<strong>哈希查找表（Hash table）、搜索树（Search tree）</strong>。</p>
+<p><strong>哈希查找表</strong>用一个哈希函数将 key 分配到不同的桶（bucket，也就是数组的不同 index）。这样，开销主要在哈希函数的计算以及数组的常数访问时间。在很多场景下，哈希查找表的性能很高。</p>
+<p>哈希查找表一般会存在“碰撞”的问题，就是说不同的 key 被哈希到了同一个 bucket。一般有两种应对方法：<strong>链表法和开放地址法</strong>。链表法将一个 bucket 实现成一个链表，落在同一个 bucket 中的 key 都会插入这个链表。开放地址法则是碰撞发生后，通过一定的规律，在数组的后面挑选“空位”，用来放置新的 key。</p>
+<p>搜索树法一般采用自平衡搜索树，包括：AVL 树，红黑树。面试时经常会被问到，甚至被要求手写红黑树代码，很多时候，面试官自己都写不上来，非常过分。</p>
+<p>自平衡搜索树法的最差搜索效率是 O(logN)，而哈希查找表最差是 O(N)。当然，哈希查找表的平均查找效率是 O(1)，如果哈希函数设计的很好，最坏的情况基本不会出现。还有一点，遍历自平衡搜索树，返回的 key 序列，一般会按照从小到大的顺序；而哈希查找表则是乱序的。</p>
+<h2 id="map-的底层如何实现">map 的底层如何实现</h2>
+<p><strong>Go 语言采用的是哈希查找表，并且使用链表解决哈希冲突。</strong></p>
+<p>代码基于
+go version go1.17 darwin/amd64</p>
+<p>Go 的 map 实现在 src/runtime/map.go 这个文件中。</p>
+<p>map 底层实质还是一个 hash table。</p>
+<p>先来看看 Go 定义了一些常量。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<span style="color:#66d9ef">const</span> (
+	<span style="color:#75715e">// 一个桶 bucket 里面最多可以装的键值对的个数，8对
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">bucketCntBits</span> = <span style="color:#ae81ff">3</span>
+	<span style="color:#a6e22e">bucketCnt</span>     = <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">bucketCntBits</span>	<span style="color:#75715e">// 1&lt;&lt;3 == 2^3 == 8
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// 触发扩容操作的最大装载因子的临界值是 6.5
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Represent as loadFactorNum/loadFactorDen, to allow integer math.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">loadFactorNum</span> = <span style="color:#ae81ff">13</span>	
+	<span style="color:#a6e22e">loadFactorDen</span> = <span style="color:#ae81ff">2</span>
+	
+	<span style="color:#75715e">// 为了保持内联，键 和 值 的最大长度都是128字节，如果超过了128个字节，就存储它的指针
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">maxKeySize</span>  = <span style="color:#ae81ff">128</span>
+	<span style="color:#a6e22e">maxElemSize</span> = <span style="color:#ae81ff">128</span>
+
+	<span style="color:#75715e">// 数据偏移应该是 bmap 的整数倍，但是需要正确的对齐。
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">dataOffset</span> = <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Offsetof</span>(<span style="color:#66d9ef">struct</span> {
+		<span style="color:#a6e22e">b</span> <span style="color:#a6e22e">bmap</span>
+		<span style="color:#a6e22e">v</span> <span style="color:#66d9ef">int64</span>
+	}{}.<span style="color:#a6e22e">v</span>)
+
+	<span style="color:#75715e">// tophash 的一些值
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">emptyRest</span>      = <span style="color:#ae81ff">0</span> <span style="color:#75715e">// cell 是空的（没有键值对），并且在更高的索引或溢出处不再有非空 cell 单元格.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">emptyOne</span>       = <span style="color:#ae81ff">1</span> <span style="color:#75715e">// cell 是空的
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">evacuatedX</span>     = <span style="color:#ae81ff">2</span> <span style="color:#75715e">// 键值对有效，并且已经迁移了一个表的前半段
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">evacuatedY</span>     = <span style="color:#ae81ff">3</span> <span style="color:#75715e">// 键值对有效，并且已经迁移了一个表的后半段
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">evacuatedEmpty</span> = <span style="color:#ae81ff">4</span> <span style="color:#75715e">// cell是空的，并且桶内的键值被迁移走了
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">minTopHash</span>     = <span style="color:#ae81ff">5</span> <span style="color:#75715e">// 最小的 tophash 
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// flags 标记
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">iterator</span>     = <span style="color:#ae81ff">1</span> <span style="color:#75715e">// 当前桶的迭代子
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">oldIterator</span>  = <span style="color:#ae81ff">2</span> <span style="color:#75715e">// 旧桶的迭代子
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">hashWriting</span>  = <span style="color:#ae81ff">4</span> <span style="color:#75715e">// 一个goroutine正在写入map
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sameSizeGrow</span> = <span style="color:#ae81ff">8</span> <span style="color:#75715e">// 当前 map 增长到新 map 相同尺寸
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// 迭代子检查桶ID的哨兵
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">noCheck</span> = <span style="color:#ae81ff">1</span><span style="color:#f92672">&lt;&lt;</span>(<span style="color:#ae81ff">8</span><span style="color:#f92672">*</span><span style="color:#a6e22e">sys</span>.<span style="color:#a6e22e">PtrSize</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> 
+)
+</code></pre></div><p>这里值得说明的一点是触发扩容操作的临界值6.5是怎么得来的。这个值太大会导致overflow buckets过多，查找效率降低，过小会浪费存储空间。</p>
+<p>据 Google 开发人员称，这个值是一个测试的程序，测量出来选择的一个经验值。</p>
+<p><strong>loadFactor = loadFactorNum / loadFactorDen = 13 / 2 = 6.5</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// A header for a Go map.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">hmap</span> <span style="color:#66d9ef">struct</span> {
+	
+	<span style="color:#a6e22e">count</span>     <span style="color:#66d9ef">int</span> 	 <span style="color:#75715e">// map 的长度
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">flags</span>     <span style="color:#66d9ef">uint8</span>
+	<span style="color:#a6e22e">B</span>         <span style="color:#66d9ef">uint8</span>  <span style="color:#75715e">// log以2为底，桶个数的对数 (总共能存 6.5 * 2^B 个元素)
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">noverflow</span> <span style="color:#66d9ef">uint16</span> <span style="color:#75715e">// 近似溢出桶的个数
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">hash0</span>     <span style="color:#66d9ef">uint32</span> <span style="color:#75715e">// 哈希种子
+</span><span style="color:#75715e"></span>
+	<span style="color:#a6e22e">buckets</span>    <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// array of 2^B Buckets. may be nil if count==0.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">oldbuckets</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// previous bucket array of half the size, non-nil only when growing
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">nevacuate</span>  <span style="color:#66d9ef">uintptr</span>        <span style="color:#75715e">// progress counter for evacuation (buckets less than this have been evacuated)
+</span><span style="color:#75715e"></span>
+	<span style="color:#a6e22e">extra</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">mapextra</span> <span style="color:#75715e">// optional fields
+</span><span style="color:#75715e"></span>}
+</code></pre></div>
+        </div>
+
+        
+        
+          
+            
+          
+          <div class="btn-improve-page">
+             
+               <a href="https://github.com/hugo-toha/hugo-toha.github.io/edit/main/content/posts/introduction/index.bn.md" title="Improve this page" target="_blank" rel="noopener">
+            
+                <i class="fas fa-code-branch"></i>
+                Improve this page
+              </a>
+          </div>
+        
+
+        
+      <hr />
+        
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+    
+  
+  
+
+
+<div class="row next-prev-navigator">
+  
+  
+</div>
+
+      <hr />
+      
+      
+      </div>
+    </div>
+  </div>
+  
+  <a id="scroll-to-top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
+  
+</section>
+
+
+      
+      
+  <section class="toc-section" id="toc-section">
+    
+    <div class="toc-holder">
+      <h5 class="text-center pl-3">Table of Contents</h5>
+      <hr>
+      <div class="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#map-的底层如何实现">map 的底层如何实现</a></li>
+  </ul>
+</nav>
+      </div>
+    </div>
+    
+  </section>
+
+    </div>
+
+    
+    
+
+
+
+
+
+
+
+
+
+  
+    
+  
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+  
+
+  
+  
+    
+    
+      
+    
+  
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+  
+  
+  
+
+  <footer class="container-fluid text-center align-content-center footer pb-2">
+    <div class="container pt-5">
+      <div class="row text-left">
+        
+        <div class="col-md-4 col-sm-12">
+          <h5>Navigation</h5>
+          
+          <ul>
+              
+              
+              
+              
+              
+              
+              
+              
+          </ul>
+          
+        </div>
+        
+        
+        <div class="col-md-4 col-sm-12">
+          <h5>Contact me:</h5>
+          <ul>
+            
+            <li><span>Email: </span> <span>lepengxi@gmail.com</span></li>
+            
+            <li><span>Phone: </span> <span>188 0013 8580</span></li>
+            
+          </ul>
+        </div>
+        
+        
+        
+          
+          <div class="col-md-4 col-sm-12">
+            <p>Stay up to date with email notification</p>
+            
+              <form method='post' action='https://blogtrottr.com'>
+              <div class="form-group">
+              <input type='email' class="form-control" name='btr_email' placeholder="Enter email"/><br />
+              <input type='hidden' name='btr_url' value='https://hugo-toha.github.ioindex.xml' />
+              <input type='hidden' name='schedule_type' value='1' />
+              <small id="emailHelp" class="form-text text-muted">By entering your email address, you agree to receive the newsletter of this website.</small>
+              <button type="submit" class="btn btn-info"> Submit </button>
+              </form>
+            
+          </div>
+        
+      </div>
+    </div>
+    
+    
+    <hr />
+    <div class="container">
+      <div class="row text-left">
+        <div class="col-md-4">
+          <a id="theme" href="https://github.com/hossainemruz/toha" target="_blank" rel="noopener">
+            <img src="/images/theme-logo_hu8376fd15465fef26ffe66b6bcf0ca686_13669_32x0_resize_box_3.png" alt="Toha Theme Logo">
+            Toha
+          </a>
+        </div>
+        <div class="col-md-4 text-center">© 2021 Copyright.</div>
+        <div class="col-md-4 text-right">
+          <a id="hugo" href="https://gohugo.io/" target="_blank" rel="noopener">Powered by
+          <img
+            src="/images/hugo-logo.svg"
+            alt="Hugo Logo"
+            height="18"
+          />
+          </a>
+        </div>
+      </div>
+    </div>
+    
+  </footer>
+
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/js/popper.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/js/navbar.js"></script>
+<script type="text/javascript" src="/js/plyr.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+<script src="/js/single.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+  </body>
+</html>

@@ -13,7 +13,7 @@
             <tbody>
                 {{ range .degrees}}
                 <tr>
-                    <td class="icon">
+                    <td class="icon">                        
                         <div class="hline"></div>
                         <div class="icon-holder">
                             <i class="fas {{ .icon }}"></i>
@@ -25,14 +25,47 @@
                     <td class="details">
                         <div class="degree-info card">
                             <div class="row">
+
+
                                 <div class="col-lg-10 col-md-8">
-                                    {{ if .institution.url }}
+
+
+
+                                    <!-- 添加校徽logo -->
+                                    <div class="nepu d-flex">
+                                        {{ if .logo }}
+                                          {{ $logoImage := resources.Get .logo }}
+                                
+                                          {{/*  svg don't support "Fit" operation   */}}
+                                          {{ if ne $logoImage.MediaType.SubType "svg" }}
+                                            {{ $logoImage = $logoImage.Fit "24x24" }}
+                                          {{ end }}
+                                          <img class="nepu-logo" src="{{ $logoImage.RelPermalink }}" alt="{{ .name }}" />
+                                        {{ end }}
+                                      
+                                        {{ if .institution.url }}
+                                        <h5><a href="{{ .institution.url }}" title="{{ .institution.name }}" target="_blank" rel="noopener">{{ .institution.name }}</a></h5>
+                                    {{ else }}
+                                       <h5>{{ .institution.name }}</h5>
+                                    {{ end }}   
+                                    </div>
+                     
+
+
+
+                                    <!-- 未修改 备份 -->
+                                    <!-- {{ if .institution.url }}
                                         <h5><a href="{{ .institution.url }}" title="{{ .institution.name }}" target="_blank" rel="noopener">{{ .institution.name }}</a></h5>
                                     {{ else }}
                                         <h5>{{ .institution.name }}</h5>
-                                    {{ end }}
+                                    {{ end }} -->
+
                                 </div>
-                                <div class="timeframe col-lg-2 col-md-4">{{ .timeframe }}</div>
+
+
+
+
+                                <div class="timeframe col-lg-2 col-md-4">    {{ .timeframe }}</div>
                             </div>
                             <h6>{{ .name }}</h6>
                             {{ if .grade }}

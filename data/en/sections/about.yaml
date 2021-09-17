@@ -1,18 +1,18 @@
 # section information
 section:
-  name: About
+  name: Resume
   id: about
   enable: true
   weight: 1
-  showOnNavbar: false
+  showOnNavbar: true
   template: sections/about.html
 
 # your designation
-designation: Software Engineer
+designation: 后端开发工程师
 # your company information
 company:
-  name: Example Co.
-  url: "https://www.example.com"
+  name: 
+  url: "#"
 
 # your resume. this file path should be relative to you "static" directory
 resume: "files/resume.pdf"
@@ -25,26 +25,14 @@ summary: 'I am a passionate software engineer with x years of working experience
 socialLinks:
 - name: Email
   icon: "fas fa-envelope"
-  url: "example@gmail.com"
+  url: "lepengxi@gmail.com"
 
 - name: Github
   icon: "fab fa-github"
-  url: "https://www.github.com/example"
+  url: "https://www.github.com/xilepeng"
 
-- name: Stackoverflow
-  icon: "fab fa-stack-overflow"
-  url: "#"
-
-- name: LinkedIn
-  icon: "fab fa-linkedin"
-  url: "#"
-
-- name: Twitter
-  icon: "fab fa-twitter"
-  url: "#"
-
-- name: Facebook
-  icon: "fab fa-facebook"
+- name: WeChat
+  icon: "fab fa-weixin"
   url: "#"
 
 # Show your badges

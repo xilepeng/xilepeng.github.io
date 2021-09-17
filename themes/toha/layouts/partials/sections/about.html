@@ -18,7 +18,8 @@
       <h5 class="p-1">
         {{ .designation }}
         {{ if .company }}
-        {{ i18n "at"}} <a href="{{ .company.url }}" title="{{ .company.name }}" target="_blank" rel="noopener">{{ .company.name }}</a>
+        <!-- 改成中文，删掉at {{ i18n "at"}}  -->
+        {{ i18n ""}} <a href="{{ .company.url }}" title="{{ .company.name }}" target="_blank" rel="noopener">{{ .company.name }}</a>
         {{ end }}
       </h5>
       {{ end }}

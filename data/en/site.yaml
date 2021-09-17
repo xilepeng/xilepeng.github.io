@@ -2,4 +2,26 @@
 copyright: © 2021 Copyright.
 
 # Meta description for your site.  This will help the search engines to find your site.
-description: Portfolio and personal blog of John Doe.
+description: 好饭不怕晚
+
+
+
+
+# # specify the list of custom menus that you want to show in the top navbar.
+# # they will be separated by a divider from the main menus.
+# customMenus:
+# - name: Docs
+#   url: https://toha-guides.netlify.app/posts/
+
+# - name: Tags
+#   url: https://hossainemruz.gitbook.io/notes/
+
+
+
+# Specify OpenGraph Headers
+openGraph:
+  title: X's Blog
+  type: website
+  description: Portfolio and personal blog of X.
+  image: images/author/john.png
+  url: https://xilepeng.github.io
