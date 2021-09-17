@@ -19,18 +19,26 @@ jobs:
     # install Hugo
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
-      with:
-        hugo-version: '0.88.1'
-        extended: true
+      # 这里不指定版本号，默认使用最新版本，避免了工作流的频繁修改。
+      # with:
+      #   hugo-version: '0.88.1' 
+      #   extended: true
+
 
     # build website
     - name: Build
       run: hugo --minify
 
     # push the generated content into the `main` (former `master`) branch.
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+    # - name: Deploy
+    #   uses: peaceiris/actions-gh-pages@v3
+    - name: GitHub Pages action
+      uses: peaceiris/actions-gh-pages@v3.7.3 
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: main # if your main branch is `master` use that here.
+        publish_branch: main 
         publish_dir: ./public
+
+
+
+
